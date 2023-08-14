@@ -40,7 +40,8 @@ namespace FunCommands
             {
                 if (DateTime.Now < value)
                 {
-                    Instigator.ShowHint("Wait <color=purple>" + (Math.Ceiling(value.Subtract(DateTime.Now).TotalSeconds).ToString()) + "</color> seconds before using this again.");
+                    Instigator.ShowHint("\n" + Plugin.Instance.Config.CooldownHintText.Replace("{rolecolor}", Instigator.Role.Color.ToHex()).Replace("{time}", Math.Ceiling(value.Subtract(DateTime.Now).TotalSeconds).ToString()));
+                   // Instigator.ShowHint("Wait <color="+  Instigator.Role.Color.ToHex() + ">" + (Math.Ceiling(value.Subtract(DateTime.Now).TotalSeconds).ToString()) + "</color> seconds before using this again.");
                     response = "Cooldown active";
                     return false;
                 }
@@ -80,8 +81,8 @@ namespace FunCommands
             Timing.RunCoroutine(PushPlayer(Instigator, Victim));
 
 
-            Victim.ShowHint(Plugin.Instance.Config.PushHintVictim.Replace("{player}", Instigator.DisplayNickname));
-            Instigator.ShowHint(Plugin.Instance.Config.PushHintInstigator.Replace("{player}", Victim.DisplayNickname));
+            Victim.ShowHint("\n" + Plugin.Instance.Config.PushHintVictim.Replace("{player}", Instigator.DisplayNickname).Replace("{rolecolor}", Instigator.Role.Color.ToHex()));
+            Instigator.ShowHint("\n" + Plugin.Instance.Config.PushHintInstigator.Replace("{player}", Victim.DisplayNickname).Replace("{rolecolor}", Victim.Role.Color.ToHex() ));
 
 
             response = "true";

@@ -40,8 +40,8 @@ namespace FunCommands
             Exiled.API.Features.Player Instigator = Exiled.API.Features.Player.Get(sender);
             if ((!Plugin.Instance.Config.PatCanSCPSPat) && (Instigator.Role.Side == Exiled.API.Enums.Side.Scp))
             {
-                Instigator.ShowHint("<color=red>SCPS cannot use this command</color>");
-                response = "SCPS cannot use this command";
+                Instigator.ShowHint("\n" + Plugin.Instance.Config.PatHintSCPCantUse);
+                response = "";
                 return false;
             }
 
@@ -49,8 +49,8 @@ namespace FunCommands
             {
                 if (DateTime.Now < value)
                 {
-                    Instigator.ShowHint("Wait <color=purple>" + ( Math.Ceiling(value.Subtract(DateTime.Now).TotalSeconds).ToString()) + "</color> seconds before using this again.");;
-                    response = "Cooldown active";
+                    Instigator.ShowHint("\n" + Plugin.Instance.Config.CooldownHintText.Replace("{rolecolor}", Instigator.Role.Color.ToHex()).Replace("{time}", Math.Ceiling(value.Subtract(DateTime.Now).TotalSeconds).ToString()));
+                    response = "";
                     return false;
                 }
             }
@@ -74,8 +74,8 @@ namespace FunCommands
 
             if ((!Plugin.Instance.Config.PatAnyone) && (!Plugin.Instance.Config.PatableRoles.Contains(Victim.Role)))
             {
-                Instigator.ShowHint("<color=red>Can't pat this role!</color>");
-                response = "Can't pat this role!";
+                Instigator.ShowHint("\n" + Plugin.Instance.Config.PatHintCantPatRole);
+                response = "";
                 return false;
             }
             if (!Cooldowns.TryGetValue(Instigator, out _))
@@ -87,10 +87,10 @@ namespace FunCommands
                 Cooldowns[Instigator] = DateTime.Now.AddSeconds(Plugin.Instance.Config.PatCooldown);
             }
 
-            PatPlayer(Instigator, Victim);
+            PatPlayer(Victim);
 
-            string VictimMsg = Plugin.Instance.Config.PatHintVictim.Replace("{player}", Instigator.DisplayNickname).Replace("{hp}", Plugin.Instance.Config.PatHealthGrant.ToString());
-            string InstigatorMSG = Plugin.Instance.Config.PatHintInstigator.Replace("{player}", Victim.DisplayNickname).Replace("{hp}", Plugin.Instance.Config.PatHealthGrant.ToString());
+            string VictimMsg = "\n" + Plugin.Instance.Config.PatHintVictim.Replace("{player}", Instigator.DisplayNickname).Replace("{hp}", Plugin.Instance.Config.PatHealthGrant.ToString()).Replace("{rolecolor}", Instigator.Role.Color.ToHex());
+            string InstigatorMSG = "\n" + Plugin.Instance.Config.PatHintInstigator.Replace("{player}", Victim.DisplayNickname).Replace("{hp}", Plugin.Instance.Config.PatHealthGrant.ToString()).Replace("{rolecolor}", Victim.Role.Color.ToHex());
             Victim.ShowHint(VictimMsg, 6f);
             Instigator.ShowHint(InstigatorMSG, 6f);
 
@@ -98,7 +98,7 @@ namespace FunCommands
             response = "true";
             return true;
         }
-        private void PatPlayer(Exiled.API.Features.Player Instigator, Exiled.API.Features.Player Victim)
+        private void PatPlayer(Exiled.API.Features.Player Victim)
         {
             Victim.Heal(Plugin.Instance.Config.PatHealthGrant, Plugin.Instance.Config.PatHealthExceedMax);
         }

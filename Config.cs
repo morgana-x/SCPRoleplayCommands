@@ -14,6 +14,9 @@ namespace FunCommands
 
         public bool Debug { get; set; } = false;
 
+        [Description("Cooldown hint text")]
+        public string CooldownHintText = "Wait <color={rolecolor}>{time}</color> seconds before using this again.";
+
         [Description("If .push is enabled")]
 
         public bool PushEnabled { get; set; } = true;
@@ -41,7 +44,7 @@ namespace FunCommands
 
 
         [Description("Message showed to instigator when victim is pushed.")]
-        public string PushHintInstigator { get; set; } = "You pushed <color=purple>{player}</color>!";
+        public string PushHintInstigator { get; set; } = "You pushed <color={rolecolor}>{player}</color>!";
 
 
 
@@ -71,10 +74,16 @@ namespace FunCommands
         public bool PatHealthExceedMax { get; set; } = false;
 
         [Description("Message showed to victim when patted.")]
-        public string PatHintVictim { get; set; } = "You have been patted by <color=purple>{player}</color>!\nGained <color=green>{hp}</color> health!";
+        public string PatHintVictim { get; set; } = "You have been patted by <color={rolecolor}>{player}</color>!\nGained <color=green>{hp}</color> health!";
 
         [Description("Message showed to instigator when victim is patted.")]
-        public string PatHintInstigator { get; set; } = "You patted <color=purple>{player}</color> and gave them <color=green>{hp}</color> health!";
+        public string PatHintInstigator { get; set; } = "You patted <color={rolecolor}>{player}</color> and gave them <color=green>{hp}</color> health!";
+
+        [Description("Message shown when scps cannot use the pat command")]
+        public string PatHintSCPCantUse { get; set; } = "<color=red>SCPS cannot use this command</color>";
+
+        [Description("Message shown when you can't pat that role")]
+        public string PatHintCantPatRole { get; set; } = "<color=red>Can't pat this role!</color>";
 
 
     }
