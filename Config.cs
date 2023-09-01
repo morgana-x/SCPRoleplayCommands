@@ -29,8 +29,6 @@ namespace FunCommands
         [Description("Cooldown in seconds between each push")]
         public float PushCooldown { get; set; } = 2f;
 
-
-
         [Description("Push Force, how much they get pushed")]
         public float PushForce { get; set; } = 1.7f;
 
@@ -85,6 +83,32 @@ namespace FunCommands
         [Description("Message shown when you can't pat that role")]
         public string PatHintCantPatRole { get; set; } = "<color=red>Can't pat this role!</color>";
 
+        [Description("If .punch is enabled")]
 
+        public bool PunchEnabled { get; set; } = true;
+
+        [Description("Range at which the attacker can punch someone")]
+        public float PunchRange { get; set; } = 1.25f;
+
+        [Description("Damage taken from the punch")]
+        public float PunchDamage { get; set; } = 2f;
+
+        [Description("Cooldown in seconds between each punch")]
+        public float PunchCooldown { get; set; } = 2f;
+
+        [Description("Push Force, how much they get pushed")]
+        public float PunchForce { get; set; } = 1.7f;
+
+
+        [Description("More iterations = more smoother push at cost of performance")]
+        public int PunchIterations { get; set; } = 15;
+
+
+        [Description("Message showed to victim when pushed.")]
+        public string PunchHintVictim { get; set; } = "You have been punched by <color=purple>{player}</color>!";
+
+
+        [Description("Message showed to instigator when victim is pushed.")]
+        public string PunchHintInstigator { get; set; } = "You punched <color={rolecolor}>{player}</color>!";
     }
 }
