@@ -1,7 +1,7 @@
 # SCPRoleplayCommands
 Code for push originated from https://github.com/BruteForceMaestro/Push
 
-This plugin adds 2 commands, both are highly configurable and have cooldown notifications etc.
+This plugin adds 3 commands,  highly configurable and have cooldown notifications etc.
 
 You can completely disable any if you want as well
 
