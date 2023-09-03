@@ -9,6 +9,8 @@ using UnityEngine;
 using MEC;
 using Exiled.API.Features.DamageHandlers;
 using Subtitles;
+using PlayerStatsSystem;
+using Footprinting;
 
 namespace FunCommands
 {
@@ -79,7 +81,10 @@ namespace FunCommands
             {
                 Cooldowns[Instigator] = DateTime.Now.AddSeconds(Plugin.Instance.Config.PushCooldown);
             }
-
+            CustomReasonDamageHandler damageHander = new CustomReasonDamageHandler(Plugin.Instance.Config.PunchDeathMessage.Replace("{attacker}", Instigator.DisplayNickname)); //(Victim, Instigator, Plugin.Instance.Config.PunchDamage, Exiled.API.Enums.DamageType.Bleeding);
+            damageHander.Damage = Plugin.Instance.Config.PunchDamage;
+            Victim.Hurt(damageHander);
+            damageHander = null;
             Timing.RunCoroutine(PunchPlayer(Instigator, Victim));
 
 
@@ -92,10 +97,6 @@ namespace FunCommands
         }
         private IEnumerator<float> PunchPlayer(Exiled.API.Features.Player Instigator, Exiled.API.Features.Player Victim)
         {
-            GenericDamageHandler damageHander =new GenericDamageHandler(Victim, Instigator, 20f, Exiled.API.Enums.DamageType.Custom, DamageHandlerBase.CassieAnnouncement.Default);
-            damageHander._deathReason = "Died from being punched :(";
-            damageHander.ApplyDamage(Victim.ReferenceHub);
-            damageHander = null;
 
             Vector3 pushed = Instigator.CameraTransform.forward * Plugin.Instance.Config.PushForce;
             Vector3 endPos = Victim.Position + new Vector3(pushed.x, 0, pushed.z);

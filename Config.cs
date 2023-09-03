@@ -38,7 +38,7 @@ namespace FunCommands
 
 
         [Description("Message showed to victim when pushed.")]
-        public string PushHintVictim { get; set; } = "You have been pushed by <color=purple>{player}</color>!";
+        public string PushHintVictim { get; set; } = "You have been pushed by <color={rolecolor}>{player}</color>!";
 
 
         [Description("Message showed to instigator when victim is pushed.")]
@@ -105,10 +105,13 @@ namespace FunCommands
 
 
         [Description("Message showed to victim when pushed.")]
-        public string PunchHintVictim { get; set; } = "You have been punched by <color=purple>{player}</color>!";
+        public string PunchHintVictim { get; set; } = "You have been punched by <color={rolecolor}>{player}</color>!";
 
 
         [Description("Message showed to instigator when victim is pushed.")]
         public string PunchHintInstigator { get; set; } = "You punched <color={rolecolor}>{player}</color>!";
+
+        [Description("Death message when death from punching occurs")]
+        public string PunchDeathMessage { get; set; } = "Punched by {attacker}";
     }
 }
