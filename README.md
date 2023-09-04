@@ -5,7 +5,7 @@ This plugin adds 4 commands,  highly configurable and have cooldown notification
 
 You can completely disable any if you want as well
 
-You can bind them in the client console with `cmdbind .push l` or `cmdbind .pat k` for example
+You can bind them in the client console with `cmdbind l .push` or `cmdbind k .pat` for example
 
 ## .push
 Push the person you are looking at
