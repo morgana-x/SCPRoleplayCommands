@@ -17,8 +17,10 @@ namespace FunCommands
         [Description("Cooldown hint text")]
         public string CooldownHintText = "Wait <color={rolecolor}>{time}</color> seconds before using this again.";
 
-        [Description("If .push is enabled")]
+        [Description("Cuffed hint text")]
+        public string CuffedHintText = "<color=red>Can't use this while cuffed!</color>";
 
+        [Description("If .push is enabled")]
         public bool PushEnabled { get; set; } = true;
 
         [Description("Range at which the pusher can push someone")]
@@ -113,5 +115,37 @@ namespace FunCommands
 
         [Description("Death message when death from punching occurs")]
         public string PunchDeathMessage { get; set; } = "Punched by {attacker}";
+
+
+        [Description("Steal enabled")]
+        public bool StealEnabled { get; set; } = true;
+
+        [Description("Cooldown for stealing")]
+        public float StealCooldown { get; set; } = 20f;
+
+        [Description("Stealing chance")]
+        public float StealChance { get; set; } = 0.25f;
+
+        [Description("Stealing range")]
+        public float StealRange { get; set; } = 1.25f;
+
+        [Description("Steal Hint duration")]
+        public float StealHintDuration { get; set; } = 5f;
+
+        [Description("Hint shown to instigator when there is nothing in the victim's inventory")]
+        public string StealEmptyInventoryHint { get; set; } = "<color={rolecolor}>{player}</color> has no items in their inventory!";
+
+        [Description("Hint shown to victim when stealing fails")]
+        public string StealFailHintVictim { get; set; } = "<color={rolecolor}>{player}</color> attempted to steal from you!";
+
+        [Description("Hint shown to Instigator when stealing fails")]
+        public string StealFailHintInstigator { get; set; } = "You failed to steal from <color={rolecolor}>{player}</color> they know. Run!";
+
+        [Description("Hint shown to victim when stealing succeeds (LEAVE BLANK IF YOU DONT WANT THEM TO KNOW)")]
+        public string StealSuccessHintVictim { get; set; } = "<color={rolecolor}>{player}</color> <color=red>stole</color> <color=green>{item}</color> from you!";
+
+        [Description("Hint shown to Instigator when stealing succeeds")]
+        public string StealSuccessHintInstigator { get; set; } = "<color=red>Stole</color>  <color=green>{item}</color> from <color={rolecolor}>{player}</color>!";
+
     }
 }

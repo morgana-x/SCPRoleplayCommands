@@ -38,6 +38,13 @@ namespace FunCommands
                 return false;
             }
             Exiled.API.Features.Player Instigator = Exiled.API.Features.Player.Get(sender);
+
+            if (Instigator.IsCuffed)
+            {
+                Instigator.ShowHint("\n" + Plugin.Instance.Config.CuffedHintText);
+                response = Plugin.Instance.Config.CuffedHintText;
+                return false;
+            }
             if ((!Plugin.Instance.Config.PatCanSCPSPat) && (Instigator.Role.Side == Exiled.API.Enums.Side.Scp))
             {
                 Instigator.ShowHint("\n" + Plugin.Instance.Config.PatHintSCPCantUse);

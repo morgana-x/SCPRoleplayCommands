@@ -39,7 +39,12 @@ namespace FunCommands
                 return false;
             }
             Exiled.API.Features.Player Instigator = Exiled.API.Features.Player.Get(sender);
-
+            if (Instigator.IsCuffed)
+            {
+                Instigator.ShowHint("\n" + Plugin.Instance.Config.CuffedHintText);
+                response = Plugin.Instance.Config.CuffedHintText;
+                return false;
+            }
             if (Cooldowns.TryGetValue(Instigator, out DateTime value))
             {
                 if (DateTime.Now < value)
@@ -75,11 +80,11 @@ namespace FunCommands
 
             if (!Cooldowns.TryGetValue(Instigator, out _))
             {
-                Cooldowns.Add(Instigator, DateTime.Now.AddSeconds(Plugin.Instance.Config.PushCooldown));
+                Cooldowns.Add(Instigator, DateTime.Now.AddSeconds(Plugin.Instance.Config.PunchCooldown));
             }
             else
             {
-                Cooldowns[Instigator] = DateTime.Now.AddSeconds(Plugin.Instance.Config.PushCooldown);
+                Cooldowns[Instigator] = DateTime.Now.AddSeconds(Plugin.Instance.Config.PunchCooldown);
             }
             CustomReasonDamageHandler damageHander = new CustomReasonDamageHandler(Plugin.Instance.Config.PunchDeathMessage.Replace("{attacker}", Instigator.DisplayNickname)); //(Victim, Instigator, Plugin.Instance.Config.PunchDamage, Exiled.API.Enums.DamageType.Bleeding);
             damageHander.Damage = Plugin.Instance.Config.PunchDamage;
