@@ -147,5 +147,35 @@ namespace FunCommands
         [Description("Hint shown to Instigator when stealing succeeds")]
         public string StealSuccessHintInstigator { get; set; } = "<color=red>Stole</color>  <color=green>{item}</color> from <color={rolecolor}>{player}</color>!";
 
+        [Description("Is Cuff enabled (Cuffing teammates)")]
+        public bool CuffEnabled { get; set; } = true;
+
+        [Description("Cuffed hint duration")]
+        public float CuffHintDuration { get; set; } = 5f;
+
+        [Description("Can you only use .cuff on teammates")]
+        public bool CuffSameTeamOnly { get; set; } = true;
+
+        [Description("Error hint shown when they are on different teams")]
+        public string CuffSameTeamOnlyHint { get; set; } = "<color=red>You can only use .cuff on the same team!</color>";
+
+        [Description("Do you have to be holding a firearm in order to cuff")]
+        public bool CuffRequireFirearm { get; set; } = true;
+
+        [Description("Error hint shown when they need to be holding a firearm")]
+        public string CuffRequireFirearmHint { get; set; } = "<color=red>You need to be holding a firearm to do this!</color>";
+
+        [Description("Cuffing cooldown")]
+        public float CuffCooldown { get; set; } = 10f;
+
+        [Description("Range at which you can cuff at")]
+        public float CuffRange { get; set; } = 1.25f;
+
+        [Description("Hint shown to Instigator at instance of cuffing")]
+        public string CuffHintInstigator { get; set; } = "You have cuffed <color={rolecolor}>{player}</color>!";
+
+        [Description("Hint shown to Instigator when they are already cuffed")]
+        public string CuffHintAlreadyCuffed { get; set; } = "<color={rolecolor}>{player}</color> is already cuffed!";
+
     }
 }

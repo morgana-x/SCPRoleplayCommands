@@ -102,7 +102,7 @@ namespace FunCommands
             Instigator.ShowHint(InstigatorMSG, 6f);
 
 
-            response = "true";
+            response = "";
             return true;
         }
         private void PatPlayer(Exiled.API.Features.Player Victim)

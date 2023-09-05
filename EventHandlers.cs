@@ -10,6 +10,7 @@ namespace FunCommands
             Pat.Cooldowns.Clear();
             Punch.Cooldowns.Clear();
             Steal.Cooldowns.Clear();
+            Cuff.Cooldowns.Clear();
         }
     }
 }

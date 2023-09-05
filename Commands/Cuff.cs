@@ -10,30 +10,46 @@ using MEC;
 using Exiled.API.Features.Items;
 using Exiled.API.Extensions;
 using InventorySystem;
+using InventorySystem.Items;
 
 namespace FunCommands
 {
     [CommandHandler(typeof(ClientCommandHandler))]
     
-    public class Steal : ParentCommand
+    public class Cuff : ParentCommand
     {
 
-        public Steal() => LoadGeneratedCommands();
+        public Cuff() => LoadGeneratedCommands();
 
-        public override string Command => ".steal";
+        public override string Command => ".cuff";
 
-        public override string[] Aliases => new string[] { "steal", ".steal" };
+        public override string[] Aliases => new string[] { "cuff", ".cuff" };
 
-        public override string Description => "has a chance of stealing an item from someone infront of you";
+        public override string Description => "allows you to cuff teammates";
 
         public override void LoadGeneratedCommands() { }
 
         public static Dictionary<Exiled.API.Features.Player, DateTime> Cooldowns = new Dictionary<Exiled.API.Features.Player, DateTime>();
 
         public System.Random rnd = new System.Random(); 
+
+        private bool IsHoldingValidCuffWeapon(Player Disarmer)
+        {
+            ReferenceHub disarmerHub = Disarmer.ReferenceHub;
+            ItemBase curInstance = disarmerHub.inventory.CurInstance;
+            if (curInstance != null)
+            {
+                IDisarmingItem disarmingItem = curInstance as IDisarmingItem;
+                if (disarmingItem != null)
+                {
+                    return disarmingItem.AllowDisarming;
+                }
+            }
+            return false;
+        }
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!Plugin.Instance.Config.StealEnabled)
+            if (!Plugin.Instance.Config.CuffEnabled)
             {
                 response = "Command disabled";
                 return false;
@@ -59,7 +75,7 @@ namespace FunCommands
             var ray = new Ray(Instigator.CameraTransform.position + (Instigator.CameraTransform.forward * 0.1f), Instigator.CameraTransform.forward);
 
 
-            if (!Physics.Raycast(ray, out RaycastHit hit, Plugin.Instance.Config.StealRange))
+            if (!Physics.Raycast(ray, out RaycastHit hit, Plugin.Instance.Config.CuffRange))
             {
                 response = "";
                 return false;
@@ -82,45 +98,45 @@ namespace FunCommands
                 response = "";
                 return false;
             }
-
-            if (!Cooldowns.TryGetValue(Instigator, out _))
+            if (Victim.IsCuffed)
             {
-                Cooldowns.Add(Instigator, DateTime.Now.AddSeconds(Plugin.Instance.Config.StealCooldown));
+                Instigator.ShowHint(Plugin.Instance.Config.CuffHintAlreadyCuffed.Replace("{player}", Victim.DisplayNickname).Replace("{rolecolor}", Victim.Role.Color.ToHex()));
+                response = "";
+                return false;
             }
-            else
+            if (Plugin.Instance.Config.CuffSameTeamOnly && (Victim.Role.Side != Instigator.Role.Side))
             {
-                Cooldowns[Instigator] = DateTime.Now.AddSeconds(Plugin.Instance.Config.StealCooldown);
+                Instigator.ShowHint(Plugin.Instance.Config.CuffSameTeamOnlyHint, duration: Plugin.Instance.Config.CuffHintDuration);
+                response = "";
+                return false;
             }
-
-            StealPlayer(Instigator, Victim);
-
-            response = "";
-            return true;
-        }
-        
-        private void StealPlayer(Exiled.API.Features.Player Instigator, Exiled.API.Features.Player Victim)
-        {
-            if (Victim.Inventory.UserInventory.Items.Count <= 0)
+            if (Plugin.Instance.Config.CuffRequireFirearm && (!IsHoldingValidCuffWeapon(Instigator)))
             {
-                Instigator.ShowHint("\n" + Plugin.Instance.Config.StealEmptyInventoryHint.Replace("{player}", Victim.DisplayNickname).Replace("{rolecolor}", Victim.Role.Color.ToHex()), duration: Plugin.Instance.Config.StealHintDuration);
-                return;
-            }
-            if (rnd.NextDouble() > Plugin.Instance.Config.StealChance)
-            {
-                Victim.ShowHint("\n" + Plugin.Instance.Config.StealFailHintVictim.Replace("{player}", Instigator.DisplayNickname).Replace("{rolecolor}", Instigator.Role.Color.ToHex()), duration: Plugin.Instance.Config.StealHintDuration);
-                Instigator.ShowHint("\n" + Plugin.Instance.Config.StealFailHintInstigator.Replace("{player}", Victim.DisplayNickname).Replace("{rolecolor}", Victim.Role.Color.ToHex()), duration: Plugin.Instance.Config.StealHintDuration);
-                return;
+                Instigator.ShowHint(Plugin.Instance.Config.CuffRequireFirearmHint, duration: Plugin.Instance.Config.CuffHintDuration);
+                response = "";
+                return false;
             }
 
             
-            KeyValuePair<ushort, InventorySystem.Items.ItemBase> SelectedItem = Victim.Inventory.UserInventory.Items.GetRandomValue();
-            ItemType item = SelectedItem.Value.ItemTypeId;
-            Victim.Inventory.ServerRemoveItem(SelectedItem.Key, SelectedItem.Value.PickupDropModel);
-            Instigator.AddItem(item);
-            Victim.ShowHint("\n" + Plugin.Instance.Config.StealSuccessHintVictim.Replace("{player}", Instigator.DisplayNickname).Replace("{rolecolor}", Instigator.Role.Color.ToHex()).Replace("{item}", item.ToString()), duration: Plugin.Instance.Config.StealHintDuration);
-            Instigator.ShowHint("\n" + Plugin.Instance.Config.StealSuccessHintInstigator.Replace("{player}", Victim.DisplayNickname).Replace("{rolecolor}", Victim.Role.Color.ToHex()).Replace("{item}", item.ToString()), duration: Plugin.Instance.Config.StealHintDuration);
 
+            if (!Cooldowns.TryGetValue(Instigator, out _))
+            {
+                Cooldowns.Add(Instigator, DateTime.Now.AddSeconds(Plugin.Instance.Config.CuffCooldown));
+            }
+            else
+            {
+                Cooldowns[Instigator] = DateTime.Now.AddSeconds(Plugin.Instance.Config.CuffCooldown);
+            }
 
+            CuffPlayer(Instigator, Victim);
+            response = "";
+            return true;
+        }
+        private void CuffPlayer(Exiled.API.Features.Player Instigator, Exiled.API.Features.Player Victim)
+        {
+            // Victim.Handcuff(Instigator);
+            Victim.Cuffer = Instigator;
+            Instigator.ShowHint("\n" + Plugin.Instance.Config.CuffHintInstigator.Replace("{player}", Victim.DisplayNickname).Replace("{rolecolor}", Victim.Role.Color.ToHex()), duration: Plugin.Instance.Config.CuffHintDuration);
         }
     }
 }

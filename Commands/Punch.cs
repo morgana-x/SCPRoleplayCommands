@@ -97,7 +97,7 @@ namespace FunCommands
             Instigator.ShowHint("\n" + Plugin.Instance.Config.PunchHintInstigator.Replace("{player}", Victim.DisplayNickname).Replace("{rolecolor}", Victim.Role.Color.ToHex() ));
 
 
-            response = "true";
+            response = "";
             return true;
         }
         private IEnumerator<float> PunchPlayer(Exiled.API.Features.Player Instigator, Exiled.API.Features.Player Victim)

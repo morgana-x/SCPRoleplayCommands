@@ -1,4 +1,6 @@
 ﻿using Exiled.API.Features;
+using HarmonyLib;
+using System;
 
 namespace FunCommands
 {
@@ -13,7 +15,8 @@ namespace FunCommands
         public static Plugin Instance;
 
         private EventHandlers _handlers;
-
+        private Harmony _harmony;
+        private string _harmornyid = $"morgana69698.rpcmd";
         public override void OnEnabled()
         {
             Instance = this;
@@ -36,12 +39,16 @@ namespace FunCommands
         {
             _handlers = new EventHandlers();
             Exiled.Events.Handlers.Server.WaitingForPlayers += _handlers.WaitingForPlayers;
+            _harmony = new Harmony(_harmornyid);
+            _harmony.PatchAll();
         }
 
         private void UnregisterEvents()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers -= _handlers.WaitingForPlayers;
             _handlers = null;
+            _harmony.UnpatchAll();
+            _harmony = null;
         }
     }
 }
