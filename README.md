@@ -1,7 +1,7 @@
 # SCPRoleplayCommands ![Downloads](https://img.shields.io/github/downloads/morgana-x/SCPRoleplayCommands/total)
 Code for push originated from https://github.com/BruteForceMaestro/Push
 
-This plugin adds 4 commands,  highly configurable and have cooldown notifications etc.
+This plugin adds 5 commands,  highly configurable and have cooldown notifications etc.
 
 You can completely disable any if you want as well
 
