@@ -15,18 +15,16 @@ namespace FunCommands
         public bool Debug { get; set; } = false;
 
         [Description("Cooldown hint text")]
-        public string CooldownHintText = "Wait <color={rolecolor}>{time}</color> seconds before using this again.";
+        public string CooldownHintText { get; set; } = "Wait <color={rolecolor}>{time}</color> seconds before using this again.";
 
         [Description("Cuffed hint text")]
-        public string CuffedHintText = "<color=red>Can't use this while cuffed!</color>";
+        public string CuffedHintText { get; set; } = "<color=red>Can't use this while cuffed!</color>";
 
         [Description("If .push is enabled")]
         public bool PushEnabled { get; set; } = true;
 
         [Description("Range at which the pusher can push someone")]
         public float PushRange { get; set; } = 1.25f;
-
-
 
         [Description("Cooldown in seconds between each push")]
         public float PushCooldown { get; set; } = 2f;
